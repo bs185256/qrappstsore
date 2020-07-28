@@ -25,6 +25,7 @@ func (h *addSnapshotHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 	if err := json.NewDecoder(r.Body).Decode(&reqData); err != nil {
 		log.Println(err)
+		return
 	}
 	defer r.Body.Close()
 	ss, err := NewWithOpts(WithApp(reqData.App), WithURL(reqData.URL), WithInvocationCtx(reqData.Ctx))

@@ -46,13 +46,11 @@ func WithInvocationCtx(ictx map[string]string) Cfg {
 	})
 }
 
-// NewWithOpts can be used to create a new snapshot of an App
-// usage:
-// NewWithOpts(App(app),URL("https://example.com/apps/", InvocationCtx(map[string]string{"foo": "bar"})))
-func NewWithOpts(opts ...Cfg) (*snapshot, error) {
+// NewWithOpts can be used to create a new snapshot of an App with the provided configurations
+func NewWithOpts(cfgs ...Cfg) (*snapshot, error) {
 	var snapshot snapshot
-	for _, o := range opts {
-		o.modify(&snapshot)
+	for _, cfg := range cfgs {
+		cfg.modify(&snapshot)
 	}
 	if snapshot.App == nil {
 		return nil, errors.New("snapshot: app cannot be nil")
