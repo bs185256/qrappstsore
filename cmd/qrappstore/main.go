@@ -9,6 +9,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/dg185200/qrappstore/internal/handler"
 	"github.com/dg185200/qrappstore/pkg/app"
 	"github.com/dg185200/qrappstore/pkg/snapshot"
 	"github.com/gorilla/handlers"
@@ -44,8 +45,8 @@ func main() {
 		}
 	}).Methods(http.MethodGet)
 
-	apiRouter.Handle("/snapshots", snapshot.NewAddSnapshotHandler(libray)).Methods(http.MethodPost)
-	apiRouter.Handle("/snapshots/{id}", snapshot.NewGetSnapshotsHandler(libray)).Methods(http.MethodGet)
+	apiRouter.Handle("/snapshots", handler.New(snapshot.NewAddSnapshotHandler(libray))).Methods(http.MethodPost)
+	apiRouter.Handle("/snapshots/{id}", handler.New(snapshot.NewGetSnapshotsHandler(libray))).Methods(http.MethodGet)
 
 	log.Println("starting server on:", addr)
 	log.Fatal(http.ListenAndServe(addr, handlers.LoggingHandler(os.Stdout, r)))

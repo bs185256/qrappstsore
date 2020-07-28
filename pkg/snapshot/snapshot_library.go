@@ -51,5 +51,9 @@ func (l *library) Delete(s *snapshot) (*snapshot, error) {
 func (l *library) Get(id string) (*snapshot, error) {
 	l.mu.Lock()
 	defer l.mu.Unlock()
-	return l.snapshots[id], nil
+	ss, ok := l.snapshots[id]
+	if !ok {
+		return nil, ErrSnapshotNotFound
+	}
+	return ss, nil
 }

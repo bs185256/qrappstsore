@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/dg185200/qrappstore/internal/httperror"
 	"github.com/dg185200/qrappstore/pkg/app"
 	"github.com/gorilla/mux"
 )
@@ -17,7 +18,7 @@ func NewAddSnapshotHandler(library Library) *addSnapshotHandler {
 	return &addSnapshotHandler{library: library}
 }
 
-func (h *addSnapshotHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (h *addSnapshotHandler) HandleRequest(w http.ResponseWriter, r *http.Request) error {
 	var reqData struct {
 		App *app.App          `json:"app,omitempty"`
 		URL string            `json:"url,omitempty"`
@@ -25,7 +26,7 @@ func (h *addSnapshotHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 	if err := json.NewDecoder(r.Body).Decode(&reqData); err != nil {
 		log.Println(err)
-		return
+		return httperror.StatusError{Code: 500, Err: err}
 	}
 	defer r.Body.Close()
 	ss, err := NewWithOpts(WithApp(reqData.App), WithURL(reqData.URL), WithInvocationCtx(reqData.Ctx))
@@ -39,6 +40,7 @@ func (h *addSnapshotHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	json.NewEncoder(w).Encode(ss)
+	return nil
 }
 
 type getSnapshotsHandler struct {
@@ -49,9 +51,15 @@ func NewGetSnapshotsHandler(library Library) *getSnapshotsHandler {
 	return &getSnapshotsHandler{library: library}
 }
 
-func (h *getSnapshotsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (h *getSnapshotsHandler) HandleRequest(w http.ResponseWriter, r *http.Request) error {
 	vars := mux.Vars(r)
 	id := vars["id"]
-	s, _ := h.library.Get(id)
-	json.NewEncoder(w).Encode(s)
+	s, err := h.library.Get(id)
+	if err != nil {
+		return httperror.StatusError{Code: 404, Err: err}
+	}
+	if err := json.NewEncoder(w).Encode(s); err != nil {
+		return httperror.StatusError{Code: 500, Err: err}
+	}
+	return nil
 }
