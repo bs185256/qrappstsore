@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/dg185200/qrappstore/pkg/app"
+	"github.com/dg185200/qrappstore/pkg/snapshot"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 )
@@ -27,6 +28,10 @@ func init() {
 
 func main() {
 	flag.Parse()
+
+	// set up dependencies
+	libray := snapshot.NewLibrary()
+
 	r := mux.NewRouter()
 	r.Use(timer, requestLoggingMiddleWare)
 	r.HandleFunc("/_ah/healthz", healthHandler).Methods(http.MethodGet)
@@ -38,6 +43,9 @@ func main() {
 			log.Println(err)
 		}
 	}).Methods(http.MethodGet)
+
+	apiRouter.Handle("/snapshots", snapshot.NewAddSnapshotHandler(libray)).Methods(http.MethodPost)
+	apiRouter.Handle("/snapshots/{id}", snapshot.NewGetSnapshotsHandler(libray)).Methods(http.MethodGet)
 
 	log.Println("starting server on:", addr)
 	log.Fatal(http.ListenAndServe(addr, handlers.LoggingHandler(os.Stdout, r)))
