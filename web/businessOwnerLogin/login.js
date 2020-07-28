@@ -21,6 +21,7 @@
     ];
 
       function authenticate(){
+        debugger;
         var username = usnname.value;
         var password = pwd.value;
         for(var i = 0; i < objPeople.length; i++) {
