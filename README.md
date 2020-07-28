@@ -1,2 +1,1 @@
-# qrappstsore
-NCR QR App Store
+# NCR QR App Store
