@@ -101,7 +101,20 @@ func (h *itemsHandler) HandleRequest(w http.ResponseWriter, r *http.Request) err
 		finalItems = append(finalItems, &item{name, price})
 	}
 	itemsResponse := &items{Items: finalItems}
-	if err := json.NewEncoder(w).Encode(buildItemCategories(itemsResponse)); err != nil {
+	finalResponse := []struct {
+		Category string
+		Items    []*item
+	}{}
+	for k, v := range buildItemCategories(itemsResponse) {
+		finalResponse = append(finalResponse, struct {
+			Category string
+			Items    []*item
+		}{
+			Category: k,
+			Items:    v,
+		})
+	}
+	if err := json.NewEncoder(w).Encode(&finalResponse); err != nil {
 		return httperror.StatusError{Code: 500, Err: err}
 	}
 	return nil
