@@ -20,13 +20,17 @@ import (
 
 var (
 	// host+port
-	addr  string
-	debug bool
+	addr     string
+	debug    bool
+	username string
+	password string
 )
 
 func init() {
 	flag.StringVar(&addr, "addr", "localhost:9000", "host+port for the server to bind to")
 	flag.BoolVar(&debug, "debug", false, "enable this flag for all debug logging")
+	flag.StringVar(&username, "username", "", "nep username")
+	flag.StringVar(&password, "password", "", "nep password")
 }
 
 func main() {
@@ -53,7 +57,7 @@ func main() {
 
 	apiRouter.Handle("/snapshots", handler.New(snapshot.NewAddSnapshotHandler(libray))).Methods(http.MethodPost)
 	apiRouter.Handle("/snapshots/{id}", handler.New(snapshot.NewGetSnapshotsHandler(libray))).Methods(http.MethodGet)
-	apiRouter.Handle("/items", handler.New(items.NewHandler("", ""))).Methods(http.MethodGet)
+	apiRouter.Handle("/items", handler.New(items.NewHandler(username, password))).Methods(http.MethodGet)
 
 	log.Println("starting server on:", addr)
 	log.Fatal(http.ListenAndServe(addr, handlers.LoggingHandler(os.Stdout, r)))
