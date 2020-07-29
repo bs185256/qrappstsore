@@ -13,7 +13,10 @@ import (
 	"github.com/dg185200/qrappstore/internal/httperror"
 )
 
-const nepOrganization = "nep-organization"
+const (
+	nepOrganization = "nep-organization"
+	enterpriseUnit  = "nep-enterprise-unit"
+)
 
 var (
 	menu = map[string][]*item{
@@ -57,6 +60,10 @@ func (h *itemsHandler) HandleRequest(w http.ResponseWriter, r *http.Request) err
 	if organization == "" {
 		return httperror.StatusError{Code: 400, Err: errors.New("items: nep-organization header is required")}
 	}
+	euid := r.Header.Get(enterpriseUnit)
+	if euid == "" {
+		return httperror.StatusError{Code: 400, Err: errors.New("items: nep-enterprise-unit is required")}
+	}
 	ctx, cancel := context.WithCancel(r.Context())
 	defer cancel()
 
@@ -66,8 +73,8 @@ func (h *itemsHandler) HandleRequest(w http.ResponseWriter, r *http.Request) err
 		return httperror.StatusError{Code: 500, Err: err}
 	}
 	r.SetBasicAuth(h.username, h.password)
-	r.Header.Add("nep-organization", "red-robin-qa")
-	r.Header.Add("nep-enterprise-unit", "7ec5fed5d44f4c91a1c885f3968b755c")
+	r.Header.Add("nep-organization", organization)
+	r.Header.Add("nep-enterprise-unit", euid)
 	r.Header.Add("nep-service-version", "2:2")
 
 	// b, _ := httputil.DumpRequestOut(r, true)
@@ -89,6 +96,7 @@ func (h *itemsHandler) HandleRequest(w http.ResponseWriter, r *http.Request) err
 		return httperror.StatusError{Code: 500, Err: err}
 	}
 	finalItems := []*item{}
+
 	for _, catalogItem := range respPayload.PageContent {
 		name := ""
 		price := 0.0
@@ -100,20 +108,23 @@ func (h *itemsHandler) HandleRequest(w http.ResponseWriter, r *http.Request) err
 		}
 		finalItems = append(finalItems, &item{name, price})
 	}
+
 	itemsResponse := &items{Items: finalItems}
+
 	finalResponse := []struct {
 		Category string  `json:"category,omitempty"`
-		Items    []*item `json:"items,omitempty"`
+		Items    []*item `json:"items"`
 	}{}
 	for k, v := range buildItemCategories(itemsResponse) {
 		finalResponse = append(finalResponse, struct {
 			Category string  `json:"category,omitempty"`
-			Items    []*item `json:"items,omitempty"`
+			Items    []*item `json:"items"`
 		}{
 			Category: k,
 			Items:    v,
 		})
 	}
+
 	if err := json.NewEncoder(w).Encode(&finalResponse); err != nil {
 		return httperror.StatusError{Code: 500, Err: err}
 	}
