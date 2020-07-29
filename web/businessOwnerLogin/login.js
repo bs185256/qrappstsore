@@ -1,8 +1,7 @@
 
       var form = document.getElementById('myform');
-      var usnname = document.getElementById('usnname');
-      var pwd = document.getElementById('pwd');
-      var abc = document.getElementById()
+      var usnname = document.getElementById("usnname");
+      var pwd = document.getElementById("pwd");
       var objPeople = [
         { 
             username: "david",
@@ -15,17 +14,22 @@
         { 
             username: "bhavya",
             password: "nexus"
+        },
+        { 
+            username: "akanksha",
+            password: "nexus"
         }
     
     ];
 
       function authenticate(){
         debugger;
-        var username = usnname.value.trim();
-        var password = pwd.value.trim();
+        const username = usnname.value.trim();
+        const password = pwd.value.trim();
+        debugger;
         for(var i = 0; i < objPeople.length; i++) {
-            if(username == objPeople[i].username && password == objPeople[i].password) {
-                console.log(username + " is logged in!!!") 
+            if(username === objPeople[i].username && password === objPeople[i].password) {
+                console.log(username + " is logged in!!!");
                 return true;
             }
         }
