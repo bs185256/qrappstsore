@@ -1,0 +1,186 @@
+body {
+    background-color: rgb(255,255,255);
+    color: #205267;
+    font-family: 'Roboto', sans-serif;
+    font-size: 1.2em;
+    margin: 0;
+    padding: 0;
+}
+
+h2 {
+    color: #205267;
+    font-size: 1.8em;
+    text-align: center;
+}
+
+.apps {
+    margin: 20px 0;
+}
+
+.apps .button {
+    margin: 10px 0;
+    text-align: center;
+}
+
+#voting h3 {
+    margin: 0;
+}
+
+#voting p {
+    margin: 0;
+}
+
+.toolbar {
+    background-color: #54BA3A;
+    color: #ffffff;
+    width: 100%;
+    height: 50px;
+    border-spacing: 0;
+    white-space: nowrap;
+    line-height: normal;
+}
+
+.toolbar img {
+    max-width: 200px;
+    max-height: 48px;
+    border-style: none!important;
+    vertical-align: middle;
+}
+
+.toolbar .banner {
+    height: 100%;
+    display: flex;
+    vertical-align: middle;
+    outline-offset: -1px;
+    padding: 0 12px 0 8px;
+    text-decoration: none;
+}
+
+.toolbar .banner span {
+    display: inline-block;
+    font-weight: 600;
+    font-family: SegoeUI-SemiBold-final,Segoe UI Semibold,SegoeUI-Regular-final,Segoe UI,"Segoe UI Web (West European)",Segoe,-apple-system,BlinkMacSystemFont,Roboto,Helvetica Neue,Tahoma,Helvetica,Arial,sans-serif;
+    font-size: 16px;
+    line-height: 48px;
+    -webkit-font-smoothing: antialiased;
+}
+
+#container {
+    margin:0 auto;
+}    
+
+#container #voting {
+    display: flex;
+    flex-flow: row wrap;
+    text-align: center;
+    justify-content: space-around;
+}
+
+#container .apps {
+    border: 1px solid #ccc;
+    margin: 10px 5px;
+    padding: 10px;
+    text-align: center;
+    max-width: 400px;
+    width: 100%;
+}
+
+.lapps img {
+    padding: 20px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.submitButton {
+	box-shadow: 0px 1px 0px 0px #fff6af;
+	background:linear-gradient(to bottom, #ffec64 5%, #ffab23 100%);
+	background-color:#ffec64;
+	border-radius:6px;
+	border:1px solid #ffaa22;
+	display:inline-block;
+	cursor:pointer;
+	color:#333333;
+	font-family:Arial;
+	font-size:15px;
+	font-weight:bold;
+	padding:6px 24px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #ffee66;
+}
+
+.submitButton:hover {
+	background:linear-gradient(to bottom, #ffab23 5%, #ffec64 100%);
+	background-color:#ffab23;
+}
+
+.submitButton:active {
+	position:relative;
+	top:1px;
+}
+
+#results .button {
+    text-align: center;
+    margin: 20px;
+}
+
+.refreshButton {
+	background-color:#44c767;
+	border-radius:28px;
+	border:1px solid #18ab29;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:17px;
+	padding:16px 31px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #2f6627;
+}
+
+.refreshButton:hover {
+	background-color:#5cbf2a;
+}
+
+.refreshButton:active {
+	position:relative;
+	top:1px;
+}
+
+footer {
+    border-top: 1px solid #ccc;
+    font-size: 0.8em;
+    margin: 40px 0;
+    padding: 20px;
+    text-align: center;
+}
+
+#loading {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(192, 192, 192, 0.5);
+    background-image: url("http://i.stack.imgur.com/MnyxU.gif");
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+@media (min-width: 960px) {
+    .toolbar {
+        display: flex;
+    }
+
+    #container {
+        margin:0 auto;
+        width: 960px;
+    }  
+    
+    #container .apps {
+        width: 400px;
+    }
+}
