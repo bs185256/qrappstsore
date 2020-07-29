@@ -102,13 +102,13 @@ func (h *itemsHandler) HandleRequest(w http.ResponseWriter, r *http.Request) err
 	}
 	itemsResponse := &items{Items: finalItems}
 	finalResponse := []struct {
-		Category string
-		Items    []*item
+		Category string  `json:"category,omitempty"`
+		Items    []*item `json:"items,omitempty"`
 	}{}
 	for k, v := range buildItemCategories(itemsResponse) {
 		finalResponse = append(finalResponse, struct {
-			Category string
-			Items    []*item
+			Category string  `json:"category,omitempty"`
+			Items    []*item `json:"items,omitempty"`
 		}{
 			Category: k,
 			Items:    v,
