@@ -6,7 +6,7 @@
   user-select: none;
 }
 .bg-img{
-  background: url("image/back.jpeg");
+  background: url("../image/back.jpeg");
   height: 100vh;
   background-size: cover;
   background-position: center;

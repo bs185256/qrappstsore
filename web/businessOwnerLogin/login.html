@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <title>NCR QR Web Application</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="./style/style.css">
    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
    <script src="login.js"></script>
   </head>
@@ -14,7 +14,7 @@
           <img src='image/ncr-logo.png' alt="image" class="center">
         </div>
         <header>QR Appstore Login</header>
-        <form id = "myform" name ="myform" action="dashboard.html" onsubmit="return authenticate()">
+        <form id = "myform" name ="myform" onsubmit="return authenticate()" action="dashboard.html">
           <div class="field">
             <span class="fa fa-user"></span>
             <input type="text" required placeholder="Enter Username" id ="usnname" name ="usnname">
@@ -30,7 +30,6 @@
           </div>
 </form>
 </div>
-<div id="result"></div>
 </div>
   </body>
 </html>

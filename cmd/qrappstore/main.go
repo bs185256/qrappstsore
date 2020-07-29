@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"flag"
 	"log"
+	"math/rand"
 	"net/http"
 	"net/http/httputil"
 	"os"
@@ -11,6 +12,7 @@ import (
 
 	"github.com/dg185200/qrappstore/internal/handler"
 	"github.com/dg185200/qrappstore/pkg/app"
+	"github.com/dg185200/qrappstore/pkg/items"
 	"github.com/dg185200/qrappstore/pkg/snapshot"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
@@ -18,17 +20,22 @@ import (
 
 var (
 	// host+port
-	addr  string
-	debug bool
+	addr     string
+	debug    bool
+	username string
+	password string
 )
 
 func init() {
 	flag.StringVar(&addr, "addr", "localhost:9000", "host+port for the server to bind to")
 	flag.BoolVar(&debug, "debug", false, "enable this flag for all debug logging")
+	flag.StringVar(&username, "username", "", "nep username")
+	flag.StringVar(&password, "password", "", "nep password")
 }
 
 func main() {
 	flag.Parse()
+	rand.Seed(time.Now().UnixNano())
 
 	// set up dependencies
 	libray := snapshot.NewLibrary()
@@ -36,6 +43,9 @@ func main() {
 	r := mux.NewRouter()
 	r.Use(timer, requestLoggingMiddleWare)
 	r.HandleFunc("/_ah/healthz", healthHandler).Methods(http.MethodGet)
+
+	sh := http.StripPrefix("/apps", http.FileServer(http.Dir("web/businessOwnerLogin")))
+	r.PathPrefix("/apps").Handler(sh)
 
 	apiRouter := r.PathPrefix("/api").Subrouter()
 	apiRouter.Use(contentTypeJSON)
@@ -47,6 +57,7 @@ func main() {
 
 	apiRouter.Handle("/snapshots", handler.New(snapshot.NewAddSnapshotHandler(libray))).Methods(http.MethodPost)
 	apiRouter.Handle("/snapshots/{id}", handler.New(snapshot.NewGetSnapshotsHandler(libray))).Methods(http.MethodGet)
+	apiRouter.Handle("/items", handler.New(items.NewHandler(username, password))).Methods(http.MethodGet)
 
 	log.Println("starting server on:", addr)
 	log.Fatal(http.ListenAndServe(addr, handlers.LoggingHandler(os.Stdout, r)))
