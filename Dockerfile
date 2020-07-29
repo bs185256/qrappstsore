@@ -11,8 +11,4 @@ RUN apk update \
     && rm -rf /var/cache/apk/*
 COPY --from=builder /build/app-registry ./
 RUN chmod +x ./app-registry
-<<<<<<< HEAD
 ENTRYPOINT ["./app-registry"]
-=======
-ENTRYPOINT ["./app-registry"]
->>>>>>> 6adcb63e5d9be034af6027da8acc0f6d04248aa3
